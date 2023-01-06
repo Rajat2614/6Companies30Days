@@ -1,28 +1,30 @@
 class Solution {
 public:
     vector<vector<int>> combinationSum3(int k, int n) {
-        return helper(k, n, 1);
+        vector<vector<int>> ans;
+        vector<int> temp;
+        helper(1,n,ans,temp,k);
+        return ans;
     }
     
-    vector<vector<int>> helper(int k, int n, int start){
-        vector<vector<int>> result;
-        
-        if(k < 1 || n < 1) return result;
-        if(k > 9 || n > 45 || n/k > 9 || start > 9) return result;
-        if(k == 1 && n >= start){
-            result.push_back(vector<int>{n});
-            return result;
+    void helper(int ind, int n, vector<vector<int>>& ans, vector<int>& temp, int k){
+        if(k==0 && n==0){
+            ans.push_back(temp);
+            return;
         }
-        
-        for(int i = start; i < 10; i++){
-            vector<vector<int>> subResult = helper(k-1, n-i, i+1);
-            if(subResult.empty()) continue;
-            for(vector<int> sol : subResult){
-                sol.push_back(i);
-                result.push_back(sol);
+
+        if(n<0){
+            return;
+        }
+
+        for(int i=ind;i<=9;i++){
+            if(i>n){
+                break;
             }
+
+            temp.push_back(i);
+            helper(i+1,n-i,ans,temp,k-1);
+            temp.pop_back();
         }
-        
-        return result;
     }
 };
